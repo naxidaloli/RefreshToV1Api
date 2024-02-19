@@ -225,7 +225,7 @@ def xyhelperGetAccessToken(getAccessTokenUrl, refresh_token):
 
 def updateGptsKey():
     global KEY_FOR_GPTS_INFO
-    golbal KEY_FOR_GPTS_INFO_ACCESS_TOKEN
+    global KEY_FOR_GPTS_INFO_ACCESS_TOKEN
     if not KEY_FOR_GPTS_INFO == '' and not KEY_FOR_GPTS_INFO.startswith("eyJhb"):
         if REFRESH_TOACCESS_ENABLEOAI:
             access_token = oaiGetAccessToken(KEY_FOR_GPTS_INFO)
