@@ -237,7 +237,6 @@ def updateGptsKey():
 # 根据 ID 发送请求并获取配置信息
 def fetch_gizmo_info(base_url, proxy_api_prefix, model_id):
     url = f"{base_url}{proxy_api_prefix}/backend-api/gizmos/{model_id}"
-    updateGptsKey()
     headers = {
         "Authorization": f"Bearer {KEY_FOR_GPTS_INFO}"
     }
@@ -254,6 +253,7 @@ def fetch_gizmo_info(base_url, proxy_api_prefix, model_id):
 # 将配置添加到全局列表
 def add_config_to_global_list(base_url, proxy_api_prefix, gpts_data):
     global gpts_configurations
+    updateGptsKey()
     # print(f"gpts_data: {gpts_data}")
     for model_name, model_info in gpts_data.items():
         # print(f"model_name: {model_name}")
@@ -2617,10 +2617,7 @@ def updateRefresh_dict():
         success_num += 1
     logging.info("更新成功: " + str(success_num) + ", 失败: " + str(error_num))
     logger.info(f"==========================================")
-    logging.info("开始更新KEY_FOR_GPTS_INFO.........")
-    updateGptsKey()
-    # 配置GPTS
-    logger.info(f"GPTS 配置信息.....................")
+    logging.info("开始更新KEY_FOR_GPTS_INFO和GPTS配置信息.......")
     # 加载配置并添加到全局列表
     gpts_data = load_gpts_config("./data/gpts.json")
     add_config_to_global_list(BASE_URL, PROXY_API_PREFIX, gpts_data)
@@ -2630,8 +2627,8 @@ def updateRefresh_dict():
 
     # 检查列表中是否有重复的模型名称
     if len(accessible_model_list) != len(set(accessible_model_list)):
-        raise Exception("检测到重复的模型名称，请检查环境变量或配置文件。")
-
+        raise Exception("检测到重复的模型名称，请检查环境变量或配置文件......")
+    logging.info("更新KEY_FOR_GPTS_INFO和GPTS配置信息成功......")
     logger.info(f"==========================================")
 
 
