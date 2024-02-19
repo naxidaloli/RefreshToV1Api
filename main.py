@@ -48,6 +48,7 @@ if PROXY_API_PREFIX != '':
     PROXY_API_PREFIX = "/" + PROXY_API_PREFIX
 UPLOAD_BASE_URL = CONFIG.get('backend_container_url', '')
 KEY_FOR_GPTS_INFO = CONFIG.get('key_for_gpts_info', '')
+KEY_FOR_GPTS_INFO_ACCESS_TOKEN = CONFIG.get('key_for_gpts_info', '')
 API_PREFIX = CONFIG.get('backend_container_api_prefix', '')
 GPT_4_S_New_Names = CONFIG.get('gpt_4_s_new_name', 'gpt-4-s').split(',')
 GPT_4_MOBILE_NEW_NAMES = CONFIG.get('gpt_4_mobile_new_name', 'gpt-4-mobile').split(',')
@@ -224,21 +225,22 @@ def xyhelperGetAccessToken(getAccessTokenUrl, refresh_token):
 
 def updateGptsKey():
     global KEY_FOR_GPTS_INFO
+    golbal KEY_FOR_GPTS_INFO_ACCESS_TOKEN
     if not KEY_FOR_GPTS_INFO == '' and not KEY_FOR_GPTS_INFO.startswith("eyJhb"):
         if REFRESH_TOACCESS_ENABLEOAI:
             access_token = oaiGetAccessToken(KEY_FOR_GPTS_INFO)
         else:
             access_token = xyhelperGetAccessToken(REFRESH_TOACCESS_XYHELPER_REFRESHTOACCESS_URL, KEY_FOR_GPTS_INFO)
         if access_token.startswith("eyJhb"):
-            KEY_FOR_GPTS_INFO = access_token
-            logging.info("KEY_FOR_GPTS_INFO被更新:" + KEY_FOR_GPTS_INFO)
+            KEY_FOR_GPTS_INFO_ACCESS_TOKEN = access_token
+            logging.info("KEY_FOR_GPTS_INFO_ACCESS_TOKEN被更新:" + KEY_FOR_GPTS_INFO_ACCESS_TOKEN)
 
 
 # 根据 ID 发送请求并获取配置信息
 def fetch_gizmo_info(base_url, proxy_api_prefix, model_id):
     url = f"{base_url}{proxy_api_prefix}/backend-api/gizmos/{model_id}"
     headers = {
-        "Authorization": f"Bearer {KEY_FOR_GPTS_INFO}"
+        "Authorization": f"Bearer {KEY_FOR_GPTS_INFO_ACCESS_TOKEN}"
     }
     response = requests.get(url, headers=headers)
     # logger.debug(f"fetch_gizmo_info_response: {response.text}")
@@ -2617,7 +2619,7 @@ def updateRefresh_dict():
         success_num += 1
     logging.info("更新成功: " + str(success_num) + ", 失败: " + str(error_num))
     logger.info(f"==========================================")
-    logging.info("开始更新KEY_FOR_GPTS_INFO和GPTS配置信息.......")
+    logging.info("开始更新KEY_FOR_GPTS_INFO_ACCESS_TOKEN和GPTS配置信息.......")
     # 加载配置并添加到全局列表
     gpts_data = load_gpts_config("./data/gpts.json")
     add_config_to_global_list(BASE_URL, PROXY_API_PREFIX, gpts_data)
@@ -2628,7 +2630,7 @@ def updateRefresh_dict():
     # 检查列表中是否有重复的模型名称
     if len(accessible_model_list) != len(set(accessible_model_list)):
         raise Exception("检测到重复的模型名称，请检查环境变量或配置文件......")
-    logging.info("更新KEY_FOR_GPTS_INFO和GPTS配置信息成功......")
+    logging.info("更新KEY_FOR_GPTS_INFO_ACCESS_TOKEN和GPTS配置信息成功......")
     logger.info(f"==========================================")
 
 
