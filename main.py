@@ -2368,32 +2368,36 @@ def chat_completions():
             ori_model_name = model_config.get('ori_name', model)
         input_tokens = count_total_input_words(messages, ori_model_name)
         comp_tokens = count_tokens(all_new_text, ori_model_name)
-        response_json = {
-            "id": generate_unique_id("chatcmpl"),
-            "object": "chat.completion",
-            "created": int(time.time()),  # 使用当前时间戳
-            "model": model,  # 使用请求中指定的模型
-            "choices": [
-                {
-                    "index": 0,
-                    "message": {
-                        "role": "assistant",
-                        "content": all_new_text  # 使用累积的文本
-                    },
-                    "finish_reason": "stop"
-                }
-            ],
-            "usage": {
-                # 这里的 token 计数需要根据实际情况计算
-                "prompt_tokens": input_tokens,
-                "completion_tokens": comp_tokens,
-                "total_tokens": input_tokens + comp_tokens
-            },
-            "system_fingerprint": None
-        }
-
-        # 返回 JSON 响应
-        return jsonify(response_json)
+        if input_tokens >= 100 and comp_tokens <= 0:
+            # 返回错误消息和状态码429
+            error_response = {"error": "空回复"}
+            return jsonify(error_response), 429
+        else:
+            response_json = {
+                "id": generate_unique_id("chatcmpl"),
+                "object": "chat.completion",
+                "created": int(time.time()),  # 使用当前时间戳
+                "model": model,  # 使用请求中指定的模型
+                "choices": [
+                    {
+                        "index": 0,
+                        "message": {
+                            "role": "assistant",
+                            "content": all_new_text  # 使用累积的文本
+                        },
+                        "finish_reason": "stop"
+                    }
+                ],
+                "usage": {
+                    # 这里的 token 计数需要根据实际情况计算    
+                    "prompt_tokens": input_tokens,
+                    "completion_tokens": comp_tokens,
+                    "total_tokens": input_tokens + comp_tokens
+                },
+                "system_fingerprint": None
+            }
+            # 返回 JSON 响应
+            return jsonify(response_json)
     else:
         return Response(generate(), mimetype='text/event-stream')
 
