@@ -11,7 +11,7 @@ if [ -z "$PROCESS_WORKERS" ]; then
     export PROCESS_WORKERS
 
     if [ -z "$PROCESS_WORKERS" ]; then
-        PROCESS_WORKERS=1
+        PROCESS_WORKERS=2
     fi
 fi
 
