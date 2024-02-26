@@ -322,9 +322,9 @@ scheduler.start()
 # PANDORA_UPLOAD_URL = 'files.pandoranext.com'
 
 
-VERSION = '0.7.8'
+VERSION = '0.7.8.1'
 # VERSION = 'test'
-UPDATE_INFO = '项目将脱离ninja，使用xyhelper，xyhelper_refreshToAccess_Url等配置需修改'
+UPDATE_INFO = '支持gpt-4-gizmo-XXX，动态配置GPTS'
 # UPDATE_INFO = '【仅供临时测试使用】 '
 
 # 解析响应中的信息
@@ -866,10 +866,10 @@ def send_text_prompt_and_get_response(messages, api_key, stream, model):
         # 检查是否有 ori_name
         if model_config:
             ori_model_name = model_config.get('ori_name', model)
+            logger.info(f"原模型名: {ori_model_name}")
         else:
             ori_model_name = model
-        logger.info(f"原模型名: {model}")
-        logger.info(f"原模型名: {ori_model_name}")
+            logger.info(f"请求模型名: {model}")
         if ori_model_name == 'gpt-4-s':
             payload = {
                 # 构建 payload
