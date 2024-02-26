@@ -2279,6 +2279,8 @@ def chat_completions():
     accessible_model_list = get_accessible_model_list()
     if model not in accessible_model_list and not 'gpt-4-gizmo-' in model:
         return jsonify({"error": "model is not accessible"}), 401
+    elif 'gpt-4-gizmo-' in model and not KEY_FOR_GPTS_INFO:
+        return jsonify({"error": "key_for_gpts_info is not accessible"}), 400
 
     stream = data.get('stream', False)
 
@@ -2441,6 +2443,8 @@ def images_generations():
     accessible_model_list = get_accessible_model_list()
     if model not in accessible_model_list and not 'gpt-4-gizmo-' in model:
         return jsonify({"error": "model is not accessible"}), 401
+    elif 'gpt-4-gizmo-' in model and not KEY_FOR_GPTS_INFO:
+        return jsonify({"error": "key_for_gpts_info is not accessible"}), 400
 
     prompt = data.get('prompt', '')
 
