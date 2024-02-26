@@ -26,7 +26,7 @@
     },
     "refresh_ToAccess": {
         "stream_sleep_time": 0,
-        "enableOai":"true",
+        "enableOai":"false",
         "xyhelper_refreshToAccess_Url": "https://demo.xyhelper.cn/applelogin"
     },
     "redis": {
