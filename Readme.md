@@ -335,16 +335,17 @@ PS. 注意，arkose_urls中的地址需要支持PandoraNext的Arkose Token获取
 
 ## 示例
 
-以ChatGPT-Next-Web项目的docker-compose部署为例，这里提供一个简单的部署配置文件示例：
+以ChatGPT-Next-Web项目插件版的docker-compose部署为例，支持完全适配项目，这里提供一个简单的部署配置文件示例：
 
 ```
 version: '3'
 services:
   chatgpt-next-web:
-    image: yidadaa/chatgpt-next-web
+    image: yangclivia/chatgpt-next-web-langchain
     ports:
       - "50013:3000"
     environment:
+      - CUSTOM_MODELS=-all,+gpt-3.5-turbo,+gpt-4-s,+gpt-4-mobile,+gpt-4-vision-preview,+gpt-4-gizmo-XXX
       - OPENAI_API_KEY=<正确的refresh_token>
       - BASE_URL=<backend-to-api容器地址>
       - CUSTOM_MODELS=+gpt-4-s,+gpt-4-mobile,+<gpts.json 中的模型名>
