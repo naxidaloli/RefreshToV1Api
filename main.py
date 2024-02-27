@@ -202,7 +202,7 @@ def oaiGetAccessToken(refresh_token):
 def xyhelperGetAccessToken(getAccessTokenUrl, refresh_token):
     try:
         logger.info("将通过这个网址请求access_token：" + getAccessTokenUrl)
-        
+
         data = {
             'refresh_token': refresh_token,
         }
@@ -271,20 +271,20 @@ def add_config_to_global_list(base_url, proxy_api_prefix, gpts_data):
         else:
             logger.info(f"Fetching gpts info for {model_name}, {model_id}")
             gizmo_info = fetch_gizmo_info(base_url, proxy_api_prefix, model_id)
-
             # 如果成功获取到数据，则将其存入 Redis
             if gizmo_info:
                 redis_client.set(model_id, str(gizmo_info))
                 logger.info(f"Cached gizmo info for {model_name}, {model_id}")
-                # 检查模型名称是否已经在列表中
-                if not any(d['name'] == model_name for d in gpts_configurations):
-                    gpts_configurations.append({
-                        'name': model_name,
-                        'id': model_id,
-                        'config': gizmo_info
-                    })
-                else:
-                    logger.info(f"Model already exists in the list, skipping...")
+
+        # 检查模型名称是否已经在列表中
+        if gizmo_info and not any(d['name'] == model_name for d in gpts_configurations):
+            gpts_configurations.append({
+                'name': model_name,
+                'id': model_id,
+                'config': gizmo_info
+            })
+        else:
+            logger.info(f"Model already exists in the list, skipping...")
 
 
 def generate_gpts_payload(model, messages):
@@ -325,6 +325,8 @@ scheduler.start()
 VERSION = '0.7.8.1'
 # VERSION = 'test'
 UPDATE_INFO = '支持gpt-4-gizmo-XXX，动态配置GPTS'
+
+
 # UPDATE_INFO = '【仅供临时测试使用】 '
 
 # 解析响应中的信息
@@ -2420,7 +2422,7 @@ def chat_completions():
                     }
                 ],
                 "usage": {
-                    # 这里的 token 计数需要根据实际情况计算    
+                    # 这里的 token 计数需要根据实际情况计算
                     "prompt_tokens": input_tokens,
                     "completion_tokens": comp_tokens,
                     "total_tokens": input_tokens + comp_tokens
