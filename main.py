@@ -322,9 +322,9 @@ scheduler.start()
 # PANDORA_UPLOAD_URL = 'files.pandoranext.com'
 
 
-VERSION = '0.7.8.1'
+VERSION = '0.7.8.2'
 # VERSION = 'test'
-UPDATE_INFO = '支持gpt-4-gizmo-XXX，动态配置GPTS'
+UPDATE_INFO = '支持填错gpt-4-gizmo-XXX，回退成gpt-3.5-turbo'
 
 
 # UPDATE_INFO = '【仅供临时测试使用】 '
@@ -947,7 +947,28 @@ def send_text_prompt_and_get_response(messages, api_key, stream, model):
                         logger.info(f"Model already exists in the list, skipping...")
                     payload = generate_gpts_payload(model, formatted_messages)
                 else:
-                    raise Exception('KEY_FOR_GPTS_INFO is not accessible')
+                    payload = {
+                        # 构建 payload
+                        "action": "next",
+                        "messages": formatted_messages,
+                        "parent_message_id": str(uuid.uuid4()),
+                        "model": "text-davinci-002-render-sha",
+                        "timezone_offset_min": -480,
+                        "suggestions": [
+                            "What are 5 creative things I could do with my kids' art? I don't want to throw them away, but it's also so much clutter.",
+                            "I want to cheer up my friend who's having a rough day. Can you suggest a couple short and sweet text messages to go with a kitten gif?",
+                            "Come up with 5 concepts for a retro-style arcade game.",
+                            "I have a photoshoot tomorrow. Can you recommend me some colors and outfit options that will look good on camera?"
+                        ],
+                        "history_and_training_disabled": False,
+                        "arkose_token": None,
+                        "conversation_mode": {
+                            "kind": "primary_assistant"
+                        },
+                        "force_paragen": False,
+                        "force_rate_limit": False
+                    }
+                    logger.debug('KEY_FOR_GPTS_INFO Or Request Model is not accessible')
 
         else:
             payload = generate_gpts_payload(model, formatted_messages)
@@ -1124,7 +1145,7 @@ def replace_sandbox(text, conversation_id, message_id, api_key):
         sandbox_path = match.group(1)
         download_url = get_download_url(conversation_id, message_id, sandbox_path)
         if download_url == None:
-            return "\n```\nError: 沙箱文件下载失败，这可能是因为您启用了隐私模式\n```"
+            return "\n```\nError: 沙箱文件下载失败，这可能是因为您的帐号启用了隐私模式\n```"
         file_name = extract_filename(download_url)
         timestamped_file_name = timestamp_filename(file_name)
         if USE_OAIUSERCONTENT_URL == False:
@@ -1192,7 +1213,7 @@ def generate_actions_allow_payload(author_role, author_name, target_message_id, 
             "action": "next",
             "messages": [
                 {
-                    "id": generate_custom_uuid_v4(),
+                    "id": str(uuid.uuid4()),
                     "author": {
                         "role": author_role,
                         "name": author_name
@@ -2043,7 +2064,7 @@ def old_data_fetcher(upstream_response, data_queue, stop_event, last_data_time, 
                 "id": chat_message_id,
                 "object": "chat.completion.chunk",
                 "created": timestamp,
-                "model": message.get("metadata", {}).get("model_slug"),
+                "model": model,
                 "choices": [
                     {
                         "index": 0,
