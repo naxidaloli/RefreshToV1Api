@@ -322,9 +322,9 @@ scheduler.start()
 # PANDORA_UPLOAD_URL = 'files.pandoranext.com'
 
 
-VERSION = '0.7.8.2'
+VERSION = '0.7.8.3'
 # VERSION = 'test'
-UPDATE_INFO = '支持填错gpt-4-gizmo-XXX，回退成gpt-3.5-turbo'
+UPDATE_INFO = 'flask直接启动，解决部分机cpu占用过大问题'
 
 
 # UPDATE_INFO = '【仅供临时测试使用】 '
