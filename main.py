@@ -2699,4 +2699,4 @@ scheduler.add_job(id='updateRefresh_run', func=updateRefresh_dict, trigger='cron
 
 # 运行 Flask 应用
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=33333, threaded=True)
