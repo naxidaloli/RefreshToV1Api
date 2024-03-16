@@ -3,6 +3,7 @@
 > [!IMPORTANT]
 >
 > Respect `xyhelper` ,Respect `ninja` , Respect `Wizerd`！
+> 开源不易，请给我一颗免费的星星!!!
 
 感谢xyhelper、ninja和Wizerd大佬们的付出，敬礼！！！
 
