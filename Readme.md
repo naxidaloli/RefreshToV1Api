@@ -185,7 +185,7 @@ PS. 注意，arkose_urls中的地址需要支持PandoraNext的Arkose Token获取
 }
 ```
 
-2. 可直接请求的时候加上相应的gpt-4-gizmo-XXX
+2. 可直接请求的时候加上相应的gpt-4-gizmo-XXX，XXX等同于上面的id的值
 ```json
 {
     "stream":true,
